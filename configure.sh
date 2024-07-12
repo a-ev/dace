@@ -22,7 +22,7 @@ if [ -z "$1" ]; then
 else
     echo "Building dace with Julia interface"
 
-    CXX_WRAP_PREFIX_PATH="/artifacts/bb75349ab1ff9361dc30b428f5f2e294064975b1"
+    CXX_WRAP_PREFIX_PATH="/artifacts/65c14d6c8b06e52ca794200129a8f3dd8b7ce34e"
 
     cmake .. \
         -DCMAKE_INSTALL_PREFIX="${JULIA_ROOT_PATH}/dev/DACE_jll/override" \
@@ -33,5 +33,6 @@ else
         -DWITH_ALGEBRAICMATRIX=ON \
         -DCMAKE_CXX_STANDARD=20 \
         -DWITH_JULIA=ON \
+        -DCUSTOM_EXIT=ON \
         -LA
 fi
