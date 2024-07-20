@@ -33,6 +33,6 @@ else
         -DWITH_ALGEBRAICMATRIX=ON \
         -DCMAKE_CXX_STANDARD=20 \
         -DWITH_JULIA=ON \
-        -DCUSTOM_EXIT=ON \
+        -DCUSTOM_EXIT=OFF \
         -LA
 fi
