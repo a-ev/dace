@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # create a clean build directory
-rm -rf build
-mkdir build && cd build
+rm -rf build-release
+mkdir build-release && cd build-release
 
 # get the Julia root path
 JULIA_ROOT_PATH=$1
@@ -33,6 +33,6 @@ else
         -DWITH_ALGEBRAICMATRIX=ON \
         -DCMAKE_CXX_STANDARD=20 \
         -DWITH_JULIA=ON \
-        -DCUSTOM_EXIT=OFF \
+        -DCUSTOM_EXIT=ON \
         -LA
 fi
