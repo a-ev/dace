@@ -1,5 +1,5 @@
 # C++ interface source files
-set(SRCCXXIF AlgebraicVector.cpp DA.cpp DACEException.cpp DAFormatter.cpp MathExtension.cpp Monomial.cpp compiledDA.cpp Interval.cpp)
+set(SRCCXXIF AlgebraicVector.cpp DA.cpp DACEException.cpp DAFormatter.cpp MathExtension.cpp Monomial.cpp compiledDA.cpp Interval.cpp StatExtension.cpp)
 
 if(WITH_ALGEBRAICMATRIX)
   list(APPEND SRCCXXIF "AlgebraicMatrix.cpp")
