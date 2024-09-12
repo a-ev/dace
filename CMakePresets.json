@@ -1,0 +1,52 @@
+{
+  "version": 8,
+  "configurePresets": [
+    {
+      "name": "dace",
+      "hidden": false,
+      "displayName": "DACE C++",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "installDir": "$env{HOME}/.local",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "$env{HOME}/.local",
+        "CMAKE_BUILD_TYPE": "Release",
+        "WITH_PTHREAD": "ON",
+        "WITH_ALGEBRAICMATRIX": "ON",
+        "CMAKE_CXX_STANDARD": "20",
+        "WITH_JULIA": "OFF"
+      }
+    },
+    {
+      "name": "julia",
+      "hidden": false,
+      "displayName": "DACE Julia",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "installDir": "$env{JULIA_DEPOT_PATH}/dev/DACE_jll/override",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "$env{JULIA_DEPOT_PATH}/dev/DACE_jll/override",
+        "CMAKE_PREFIX_PATH": "$env{JULIA_DEPOT_PATH}/artifacts/65c14d6c8b06e52ca794200129a8f3dd8b7ce34e",
+        "CMAKE_INSTALL_RPATH": "$env{JULIA_DEPOT_PATH}/artifacts/65c14d6c8b06e52ca794200129a8f3dd8b7ce34e/lib:$env{JULIA_DEPOT_PATH}/juliaup/julia-1.10.5+0.x64.linux.gnu/lib",
+        "CMAKE_BUILD_TYPE": "Release",
+        "WITH_PTHREAD": "ON",
+        "WITH_ALGEBRAICMATRIX": "ON",
+        "CMAKE_CXX_STANDARD": "20",
+        "WITH_JULIA": "ON",
+        "CUSTOM_EXIT": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "dace",
+      "displayName": "DACE C++",
+      "configurePreset": "dace"
+    },
+    {
+      "name": "julia",
+      "displayName": "DACE Julia",
+      "configurePreset": "julia"
+    }
+  ]
+}
