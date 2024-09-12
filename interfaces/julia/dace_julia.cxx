@@ -335,4 +335,15 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
 
     mod.method("hessian", [](const DA& da) { return da.hessian(); });
     mod.method("hessian", [](const AlgebraicVector<DA>& vec) { return vec.hessian(); });
+
+    // statistics functions
+    mod.method("getMultiIndices", [](const unsigned int no, const unsigned int nv) { return getMultiIndices(no, nv); });
+    mod.method("getRawMoments", [](const DA& mgf, const unsigned int no) {
+                auto [mi, rm] = getRawMoments(mgf, no);
+                return std::make_tuple(mi, rm);
+        });
+    mod.method("getCentralMoments", [](const DA& mgf, const unsigned int no) {
+                auto [mi, cm] = getCentralMoments(mgf, no);
+                return std::make_tuple(mi, cm);
+        });
 }
