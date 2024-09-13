@@ -337,13 +337,14 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     mod.method("hessian", [](const AlgebraicVector<DA>& vec) { return vec.hessian(); });
 
     // statistics functions
-    mod.method("getMultiIndices", [](const unsigned int no, const unsigned int nv) { return getMultiIndices(no, nv); });
+    mod.method("getMultiIndices", [](const unsigned int no, const unsigned int nv) { return getMultiIndices(no, nv); },
+        "Get all multi-indices of order `arg1` in `arg2` variables.");
     mod.method("getRawMoments", [](const DA& mgf, const unsigned int no) {
                 auto [mi, rm] = getRawMoments(mgf, no);
                 return std::make_tuple(mi, rm);
-        });
+        }, "Compute the raw moments up to order `arg2` given the moment generating function `arg1`.");
     mod.method("getCentralMoments", [](const DA& mgf, const unsigned int no) {
                 auto [mi, cm] = getCentralMoments(mgf, no);
                 return std::make_tuple(mi, cm);
-        });
+        }, "Compute the central moments up to order `arg2` given the moment generating function `arg1`.");
 }
