@@ -40,8 +40,8 @@
 
 namespace DACE {
 
-typedef std::vector<unsigned int> vectorui;
-typedef std::vector<std::vector<unsigned int>> matrixui;
+typedef std::vector<unsigned int> vectorui; //!< Shorthand notation for std::vector<unsigned int>.
+typedef std::vector<std::vector<unsigned int>> matrixui; //!< Shorthand notation for std::vector<std::vector<unsigned int>>.
 
 DACE_API matrixui getMultiIndices(const unsigned int no, const unsigned int nv); //!< Get all multi-indices of order no in nv variables
 DACE_API std::pair<matrixui, vectordb> getRawMoments(const DA& mgf, const unsigned int no = DA::getMaxOrder()); //!< Get raw moments up to order no
