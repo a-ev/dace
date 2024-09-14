@@ -93,8 +93,8 @@ public:
 
     DA(DA &&da);                                                            //!< Move constructor
 
-    explicit DA(const int i, const double c = 1.0);                         //!< Constructor for DA identities
-    explicit DA(const unsigned int i, const double c = 1.0);                //!< Constructor for DA identities
+    explicit DA(const int i, const double c);                               //!< Constructor for DA identities
+    explicit DA(const unsigned int i, const double c);                      //!< Constructor for DA identities
     DA(const double c);                                                     //!< Constructor for DA constants
     ~DA() throw();                                                          //!< Destructor
 
@@ -214,7 +214,7 @@ public:
     *    Norm and estimation routines
     *********************************************************************************/
     unsigned int size() const;                                              //!< Number of non-zero coefficients
-    double abs() const;                                                     //!< Maximum absolute value of all coefficients
+    // double abs() const;                                                     //!< Maximum absolute value of all coefficients
     double norm(const unsigned int type = 0) const;                         //!< Different types of norms over all coefficients
     std::vector<double> orderNorm(const unsigned int var = 0, const unsigned int type = 0) const;
                                                                             //!< Different types of norms over coefficients of each order separately
@@ -330,7 +330,7 @@ DACE_API DA LogGammaFunction(const DA &da);
 DACE_API DA PsiFunction(const unsigned int n, const DA &da);
 
 DACE_API unsigned int size(const DA &da);
-DACE_API double abs(const DA &da);
+// DACE_API double abs(const DA &da);
 DACE_API double norm(const DA &da, unsigned int type = 0);
 DACE_API std::vector<double> orderNorm(const DA &da, unsigned int var = 0, unsigned int type = 0);
 DACE_API std::vector<double> estimNorm(const DA &da, unsigned int var = 0, unsigned int type = 0, unsigned int nc = DA::getMaxOrder());

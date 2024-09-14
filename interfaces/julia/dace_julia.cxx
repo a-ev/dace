@@ -129,7 +129,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     mod.method("powd", [](const DA& da, const double p) { return da.pow(p); });
 
     // norm and estimation routines
-    mod.method("abs", [](const DA& da) { return da.abs(); });
+    // mod.method("abs", [](const DA& da) { return da.abs(); });
     mod.method("norm", [](const DA& da, const unsigned int p) { return da.norm(p); });
     mod.method("orderNorm", [](const DA& da, const unsigned int v, const unsigned int p) { return da.orderNorm(v, p); });
     mod.method("estimNorm", [](const DA& da, const unsigned int v, const unsigned int p, const unsigned int o) { return da.estimNorm(v, p, o); });

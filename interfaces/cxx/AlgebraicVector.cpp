@@ -365,7 +365,7 @@ template<> AlgebraicVector<DA> AlgebraicVector<DA>::identity(const size_t n){
  */
     AlgebraicVector<DA> temp(n);
     for(size_t i=0; i < n; i++){
-        temp[i] = DA((int)(i+1));}
+        temp[i] = DA((int)(i+1), 1.0);}
 
     return temp;
 }
