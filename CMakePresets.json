@@ -11,6 +11,7 @@
       "cacheVariables": {
         "CMAKE_INSTALL_PREFIX": "$env{HOME}/.local",
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "WITH_PTHREAD": "ON",
         "WITH_ALGEBRAICMATRIX": "ON",
         "CMAKE_CXX_STANDARD": "20",
@@ -29,6 +30,7 @@
         "CMAKE_PREFIX_PATH": "$env{JULIA_DEPOT_PATH}/artifacts/65c14d6c8b06e52ca794200129a8f3dd8b7ce34e",
         "CMAKE_INSTALL_RPATH": "$env{JULIA_DEPOT_PATH}/artifacts/65c14d6c8b06e52ca794200129a8f3dd8b7ce34e/lib:$env{JULIA_DEPOT_PATH}/juliaup/julia-1.10.5+0.x64.linux.gnu/lib",
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "WITH_PTHREAD": "ON",
         "WITH_ALGEBRAICMATRIX": "ON",
         "CMAKE_CXX_STANDARD": "20",
