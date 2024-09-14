@@ -2,5 +2,4 @@
 .idea
 .vscode
 build/
-build-release/
 documentation/
