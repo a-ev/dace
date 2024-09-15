@@ -9,6 +9,8 @@
       "binaryDir": "${sourceDir}/build/${presetName}",
       "installDir": "$env{HOME}/.local",
       "cacheVariables": {
+        "CMAKE_C_COMPILER": "/usr/bin/gcc",
+        "CMAKE_CXX_COMPILER": "/usr/bin/g++",
         "CMAKE_INSTALL_PREFIX": "$env{HOME}/.local",
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
@@ -26,6 +28,8 @@
       "binaryDir": "${sourceDir}/build/${presetName}",
       "installDir": "$env{JULIA_DEPOT_PATH}/dev/DACE_jll/override",
       "cacheVariables": {
+        "CMAKE_C_COMPILER": "/usr/bin/gcc",
+        "CMAKE_CXX_COMPILER": "/usr/bin/g++",
         "CMAKE_INSTALL_PREFIX": "$env{JULIA_DEPOT_PATH}/dev/DACE_jll/override",
         "CMAKE_PREFIX_PATH": "$env{JULIA_DEPOT_PATH}/artifacts/65c14d6c8b06e52ca794200129a8f3dd8b7ce34e",
         "CMAKE_INSTALL_RPATH": "$env{JULIA_DEPOT_PATH}/artifacts/65c14d6c8b06e52ca794200129a8f3dd8b7ce34e/lib:$env{JULIA_DEPOT_PATH}/juliaup/julia-1.10.5+0.x64.linux.gnu/lib",
