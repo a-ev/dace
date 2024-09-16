@@ -1049,6 +1049,22 @@ DA DA::mod(const double p) const{
     return temp;
 }
 
+DA DA::abs() const{
+/*! Compute the absolute value of the current DA object.
+   \return A new DA object containing the absolute value.
+   \throw DACE::DACEException
+ */
+    return std::signbit((*this).cons()) ? -(*this) : (*this);
+}
+
+DA DA::abs2() const{
+/*! Compute the square of the absolute value of the current DA object.
+   \return A new DA object containing the square of the absolute value.
+   \throw DACE::DACEException
+ */
+    return sqr();
+}
+
 DA DA::pow(const int p) const{
 /*! Elevate a DA object to a given integer power.
     The result is copied in a new DA object.
@@ -1567,18 +1583,6 @@ unsigned int DA::size() const{
 
     return res;
 }
-
-// double DA::abs() const{
-// /*! Compute the max norm of a DA object.
-//    \return A double corresponding to the result of the operation.
-//    \throw DACE::DACEException
-//  */
-//     double c;
-//     c=daceAbsoluteValue(m_index);
-//     if(daceGetError()) DACEException();
-
-//     return c;
-// }
 
 double DA::norm(const unsigned int type) const{
 /*! Compute different types of norms for a DA object.
@@ -2159,6 +2163,26 @@ DA mod(const DA &da, double p){
    \sa DA::mod
  */
     return da.mod(p);}
+
+DA abs(const DA &da){
+/*! Compute the absolute value of a DA object.
+    The result is copied in a new DA object.
+   \param[in] da a given DA object.
+   \return A new DA object containing the result of the operation.
+   \throw DACE::DACEException
+   \sa DA::abs
+ */
+    return da.abs();}
+
+DA abs2(const DA &da){
+/*! Compute the square of the absolute value of a DA object.
+    The result is copied in a new DA object.
+   \param[in] da a given DA object.
+   \return A new DA object containing the result of the operation.
+   \throw DACE::DACEException
+   \sa DA::abs2
+ */
+    return da.abs2();}
 
 DA pow(const DA &da, int p){
 /*! Raise a DA object to a given integer power.
