@@ -36,6 +36,11 @@
 #include <algorithm>
 #include <string>
 
+#ifdef WITH_EIGEN
+#include <eigen3/Eigen/Core>
+#include <eigen3/Eigen/Eigenvalues>
+#endif /* WITH_EIGEN */
+
 // DACE classes
 #include "dace/PromotionTrait.h"
 #include "dace/AlgebraicVector.h"
@@ -809,6 +814,34 @@ template<class T> AlgebraicMatrix<double> cons(const AlgebraicMatrix<T>& obj) {
  */
     return obj.cons();
 }
+
+#ifdef WITH_EIGEN
+
+template<class T> std::pair<AlgebraicVector<T>, AlgebraicMatrix<T>> AlgebraicMatrix<T>::eigh() const{
+
+    const unsigned int nr = this->_nrows;
+    const unsigned int nc = this->_ncols;
+    if (nr!=nc)
+        throw std::runtime_error("DACE::AlgebraicMatrix<T>::eigh: Matrix must be square to compute the eigendecomposition.");
+
+    Eigen::MatrixX<T> temp = Eigen::MatrixX<T>(nr, nc);
+    for (unsigned int i=0; i<nr; i++)
+        for (unsigned int j=0; j<nc; j++)
+            temp(i,j) = this->at(i,j);
+
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixX<T>> solver(temp);
+
+    AlgebraicVector<T> val = AlgebraicVector(solver.eigenvalues().data(), nr);
+    AlgebraicMatrix<T> vec = AlgebraicMatrix(solver.eigenvectors().transpose().data(), nr, nc);
+
+    return std::make_pair(val, vec);
+}
+
+template<class T> std::pair<AlgebraicVector<T>, AlgebraicMatrix<T>> eigh(const AlgebraicMatrix<T> &obj){
+    return obj.eigh();
+}
+
+#endif /* WITH_EIGEN */
 
 }
 #endif /* DINAMICA_DAMATRIX_T_H_ */

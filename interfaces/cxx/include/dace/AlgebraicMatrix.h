@@ -72,6 +72,14 @@ public:
      */
     AlgebraicMatrix(const int nrows, const int ncols, const T &d) : _nrows(nrows), _ncols(ncols), _data(nrows*ncols, d) { };
 
+    /*!
+     * Constructor from raw data pointer. The matrix is filled in row-major order.
+     * \param[in] data pointer to the raw data
+     * \param[in] nrows number of rows of the matrix
+     * \param[in] ncols number of columns of the matrix
+     */
+    AlgebraicMatrix(const T* data, const int nrows, const int ncols) : _nrows(nrows), _ncols(ncols), _data(data, data + nrows*ncols) { };
+
     /***********************************************************************************
     *     Output number of rows, columns, and size
     ************************************************************************************/
@@ -111,6 +119,8 @@ public:
     AlgebraicMatrix<T> submat(const unsigned int first_row, const unsigned int first_col, const unsigned int last_row, const unsigned int last_col) const;  //!< Extract submatrix
     AlgebraicMatrix<T> submat(const unsigned int last_row, const unsigned int last_col) const;                                                              //!< Extract submatrix, starting from position (0,0)
 
+    T* data() { return this->_data.data(); }; //!< Return raw data pointer
+
     /***********************************************************************************
     *     Matrix operations
     ************************************************************************************/
@@ -127,6 +137,13 @@ public:
     *     Coefficient access routines
     ************************************************************************************/
     AlgebraicMatrix<double> cons() const;   //!< Return the constant part of a AlgebraicMatrix<T>
+
+    /***********************************************************************************
+    *     Linear algebra routines backed by Eigen
+    ************************************************************************************/
+#ifdef WITH_EIGEN
+    std::pair<AlgebraicVector<T>, AlgebraicMatrix<T>> eigh() const; //!< Eigenvalue decomposition for Hermitian matrices
+#endif /* WITH_EIGEN */
 
     /***********************************************************************************
     *     Input/Output routines
@@ -178,6 +195,10 @@ template<class T> AlgebraicMatrix<double> cons(const AlgebraicMatrix<T> &obj);
  ************************************************************************************/
 typedef AlgebraicMatrix<DA> matrixDA;     //!< Short for AlgebraicMatrix<DA>
 typedef AlgebraicMatrix<double> matrixdb; //!< Short for AlgebraicMatrix<double>
+
+#ifdef WITH_EIGEN
+template<class T> std::pair<AlgebraicVector<T>, AlgebraicMatrix<T>> eigh(const AlgebraicMatrix<T> &obj);
+#endif /* WITH_EIGEN */
 
 }
 

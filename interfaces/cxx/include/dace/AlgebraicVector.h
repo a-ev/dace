@@ -57,6 +57,7 @@ public:
     AlgebraicVector(const std::vector<T> &v);                                                 //!< Copy constructor
     AlgebraicVector(const std::vector<T> &v, const size_t first, const size_t last);          //!< Extraction constructor
     AlgebraicVector(std::initializer_list<T> l);                                              //!< Constructor from braced initializer list
+    AlgebraicVector(const T *data, const size_t size);                                        //!< Constructor from raw array
 
     /***********************************************************************************
     *     Element and coefficient access / extraction routines

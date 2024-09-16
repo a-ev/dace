@@ -40,6 +40,9 @@
 #include <stack>
 #include <initializer_list>
 #include <cmath>
+#ifdef WITH_EIGEN
+#include <eigen3/Eigen/Core>
+#endif /* WITH_EIGEN */
 
 #include "dace/dacecore.h"
 
@@ -419,5 +422,31 @@ public:
 };
 
 }
+
+
+#ifdef WITH_EIGEN
+
+namespace Eigen {
+
+template<> struct NumTraits<DACE::DA> : NumTraits<double> {
+    typedef DACE::DA Real;
+    typedef DACE::DA NonInteger;
+    typedef DACE::DA Literal;
+    typedef DACE::DA Nested;
+
+    enum {
+        IsComplex = 0,
+        IsInteger = 0,
+        IsSigned = 1,
+        RequireInitialization = 1,
+        ReadCost = 1,
+        AddCost = 1,
+        MulCost = 1
+    };
+};
+
+} // namespace Eigen
+
+#endif /* WITH_EIGEN */
 
 #endif /* DINAMICA_DA_H_ */

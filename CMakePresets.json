@@ -16,6 +16,7 @@
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "WITH_PTHREAD": "ON",
         "WITH_ALGEBRAICMATRIX": "ON",
+        "WITH_EIGEN": "ON",
         "CMAKE_CXX_STANDARD": "20",
         "WITH_JULIA": "OFF"
       }
