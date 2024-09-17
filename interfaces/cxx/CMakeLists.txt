@@ -15,12 +15,12 @@ if(WIN32)
 endif(WIN32)
 
 # statically and dynamically linked C++ interface library with the corresponding c core object files compiled in
-if (WITH_JULIA)
-    add_library(dace SHARED $<TARGET_OBJECTS:c_core> $<TARGET_OBJECTS:c_core_contrib> $<TARGET_OBJECTS:dacecxx> $<TARGET_OBJECTS:dacejulia>)
-    target_link_libraries(dace PUBLIC JlCxx::cxxwrap_julia)
-    target_link_libraries(dace PUBLIC JlCxx::cxxwrap_julia_stl)
+if(WITH_JULIA)
+  add_library(dace SHARED $<TARGET_OBJECTS:c_core> $<TARGET_OBJECTS:c_core_contrib> $<TARGET_OBJECTS:dacecxx> $<TARGET_OBJECTS:dacejulia>)
+  target_link_libraries(dace PUBLIC JlCxx::cxxwrap_julia)
+  target_link_libraries(dace PUBLIC JlCxx::cxxwrap_julia_stl)
 else()
-    add_library(dace SHARED $<TARGET_OBJECTS:c_core> $<TARGET_OBJECTS:c_core_contrib> $<TARGET_OBJECTS:dacecxx>)
+  add_library(dace SHARED $<TARGET_OBJECTS:c_core> $<TARGET_OBJECTS:c_core_contrib> $<TARGET_OBJECTS:dacecxx>)
 endif()
 add_library(dace_s STATIC $<TARGET_OBJECTS:c_core_s> $<TARGET_OBJECTS:c_core_contrib_s> $<TARGET_OBJECTS:dacecxx_s>)
 
@@ -31,6 +31,11 @@ if(WITH_PTHREAD)
   target_link_libraries(dace PUBLIC pthread)
   target_link_libraries(dace_s PUBLIC pthread)
 endif(WITH_PTHREAD)
+
+if(WITH_EIGEN)
+  target_compile_definitions(dace PUBLIC WITH_EIGEN)
+  target_compile_definitions(dace_s PUBLIC WITH_EIGEN)
+endif()
 
 # library versioning
 set_property(TARGET dace PROPERTY VERSION "${DACE_MAJOR_VERSION}.${DACE_MINOR_VERSION}.${DACE_PATCH_VERSION}")

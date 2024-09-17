@@ -73,7 +73,6 @@ option(WITH_JULIA "Build the Julia interface" OFF)
 if(WITH_EIGEN)
   find_package(Eigen3 REQUIRED)
   add_definitions(-DWITH_EIGEN)
-  set(Eigen3_INCLUDE_DIR "$ENV{HOME}/.local/include")
 endif()
 if(WITH_JULIA)
   find_package(JlCxx REQUIRED)
@@ -128,9 +127,6 @@ include_directories("core/include")
 include_directories("${CMAKE_BINARY_DIR}/core/include")
 # globally set the include directory for the C++ interface headers
 include_directories("interfaces/cxx/include")
-if(WITH_EIGEN)
-  include_directories("${Eigen3_INCLUDE_DIR}")
-endif()
 
 # now process the subdirectories
 add_subdirectory(core/contrib)

@@ -175,6 +175,7 @@ public:
     *     Comparison operators (based on the constant part for now)
     *********************************************************************************/
 
+/*
     friend inline bool DACE_API operator==(const DA &da1, const DA &da2) { return da1.cons() == da2.cons(); };  //!< Equality comparison
     friend inline bool DACE_API operator==(const DA &da, const double c) { return da.cons() == c; };            //!< Equality comparison
     friend inline bool DACE_API operator==(const double c, const DA &da) { return c == da.cons(); };            //!< Equality comparison
@@ -198,6 +199,7 @@ public:
     friend inline bool DACE_API operator>=(const DA &da1, const DA &da2) { return da1.cons() >= da2.cons(); };  //!< Greater than or equal comparison
     friend inline bool DACE_API operator>=(const DA &da, const double c) { return da.cons() >= c; };            //!< Greater than or equal comparison
     friend inline bool DACE_API operator>=(const double c, const DA &da) { return c >= da.cons(); };            //!< Greater than or equal comparison
+*/
 
     /********************************************************************************
     *     Math routines
@@ -421,7 +423,7 @@ public:
     friend DACE_API std::ostream& operator<<(std::ostream &out, const storedDA &sda);      //!< Output to C++ stream in binary form
 };
 
-}
+} // namespace DACE
 
 
 #ifdef WITH_EIGEN
