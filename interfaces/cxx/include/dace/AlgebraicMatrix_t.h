@@ -500,7 +500,7 @@ template<class T> AlgebraicMatrix<T> AlgebraicMatrix<T>::transpose() const {
 /*! \cond */
 /* Auxiliary functions for inverse and determinant computation, ignored in Doxygen Documentation */
 template<class T> unsigned int AlgebraicMatrix<T>::pivot(unsigned int& k, const unsigned int ii, const AlgebraicMatrix<T>& A, std::vector<unsigned int>& P, std::vector<unsigned int>& R, std::vector<unsigned int>& C1, std::vector<unsigned int>& C2, T& det) {
-    using std::abs;
+    // using std::abs;
 
     unsigned int im = 0;
     double t, m = 0;
@@ -510,7 +510,7 @@ template<class T> unsigned int AlgebraicMatrix<T>::pivot(unsigned int& k, const 
         if (P[i]==0){
             for (unsigned int j=0; j<n; j++){
                 if (P[j]==0){
-                    t = abs( A.at(R[i],j) );
+                    t = norm(A.at(R[i],j), 0);
                     if (!(t<m)){
                         im = i;
                         k = j;

@@ -360,11 +360,25 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
         wrapped.module().method("firstindex", [](const WrappedT& amat)->int64_t { return 1; });
         wrapped.module().method("lastindex", [](const WrappedT& amat)->int64_t { return amat.size(); });
         wrapped.module().unset_override_module();
+
+        // matrix specific methods
+        wrapped.method("transpose", [](const WrappedT& amat) { return amat.transpose(); });
+        wrapped.method("det", [](const WrappedT& amat) { return amat.det(); });
+        wrapped.method("inv", [](const WrappedT& amat) { return amat.inv(); });
+        wrapped.method("frobenius", [](const WrappedT& amat) { return amat.frobenius(); });
+#ifdef WITH_EIGEN
+        wrapped.module().method("eigh", [](const WrappedT& amat) {
+            auto [val, vec] = amat.eigh();
+            return std::make_tuple(val, vec);
+        });
+#endif
     });
 
     // treat AlgebraicVector as an element of STL containers
     jlcxx::stl::apply_stl<AlgebraicMatrix<DA>>(mod);
     jlcxx::stl::apply_stl<AlgebraicMatrix<double>>(mod);
+
+    mod.method("cons", [](const AlgebraicMatrix<DA>& mat)->AlgebraicMatrix<double> { return mat.cons(); });
 
     // Jacobian of a DA object (mimics the behavior of AlgebraicVecotr::jacobian() when called on a vector of size 1)
     mod.method("jacobian", [](const DA& da) { return da.jacobian(); });
