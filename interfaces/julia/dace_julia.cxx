@@ -157,7 +157,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
 
     // override methods in Base
     mod.set_override_module(jl_base_module);
-    // operators
+    // arithmetic operators
     mod.method("+", [](const DA& da1, const DA& da2) { return da1 + da2; });
     mod.method("+", [](const DA& da, const double c) { return da + c; });
     mod.method("+", [](const double c, const DA& da) { return c + da; });
@@ -171,6 +171,25 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     mod.method("/", [](const DA& da, const double c) { return da / c; });
     mod.method("/", [](const double c, const DA& da) { return c / da; });
     mod.method("-", [](const DA& da) { return -da; });
+    // comparison operators
+    mod.method("==", [](const DA &da1, const DA &da2) { return da1 == da2; });
+    mod.method("==", [](const DA &da, const double c) { return da == c; });
+    mod.method("==", [](const double c, const DA &da) { return c == da; });
+    mod.method("!=", [](const DA &da1, const DA &da2) { return da1 != da2; });
+    mod.method("!=", [](const DA &da, const double c) { return da != c; });
+    mod.method("!=", [](const double c, const DA &da) { return c != da; });
+    mod.method("<", [](const DA &da1, const DA &da2) { return da1 < da2; });
+    mod.method("<", [](const DA &da, const double c) { return da < c; });
+    mod.method("<", [](const double c, const DA &da) { return c < da; });
+    mod.method(">", [](const DA &da1, const DA &da2) { return da1 > da2; });
+    mod.method(">", [](const DA &da, const double c) { return da > c; });
+    mod.method(">", [](const double c, const DA &da) { return c > da; });
+    mod.method("<=", [](const DA &da1, const DA &da2) { return da1 <= da2; });
+    mod.method("<=", [](const DA &da, const double c) { return da <= c; });
+    mod.method("<=", [](const double c, const DA &da) { return c <= da; });
+    mod.method(">=", [](const DA &da1, const DA &da2) { return da1 >= da2; });
+    mod.method(">=", [](const DA &da, const double c) { return da >= c; });
+    mod.method(">=", [](const double c, const DA &da) { return c >= da; });
     // math functions
     mod.method("sin", [](const DA& da) { return da.sin(); });
     mod.method("cos", [](const DA& da) { return da.cos(); });
