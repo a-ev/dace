@@ -71,11 +71,14 @@ option(WITH_EIGEN "Include additional linear algebra routines delegated to Eigen
 option(WITH_JULIA "Build the Julia interface" OFF)
 
 if(WITH_EIGEN)
-  find_package(Eigen3 REQUIRED)
+  find_package(Eigen3 3.4 REQUIRED)
   add_definitions(-DWITH_EIGEN)
+  message(STATUS "Found Eigen3 v${Eigen3_VERSION}: ${Eigen3_DIR}")
+  set(Eigen3_INCLUDE_DIRS "${Eigen3_DIR}/../../../include")
 endif()
 if(WITH_JULIA)
   find_package(JlCxx REQUIRED)
+  add_definitions(-DWITH_JULIA)
 endif()
 
 # Tri-state option for memory model and the associated choices
@@ -127,6 +130,9 @@ include_directories("core/include")
 include_directories("${CMAKE_BINARY_DIR}/core/include")
 # globally set the include directory for the C++ interface headers
 include_directories("interfaces/cxx/include")
+if(WITH_EIGEN)
+  include_directories(${Eigen3_INCLUDE_DIRS})
+endif()
 
 # now process the subdirectories
 add_subdirectory(core/contrib)
@@ -171,7 +177,7 @@ if(WIN32)
     CopyFiles \\\"$INSTDIR\\\\lib\\\\dace.dll\\\" \\\"$SYSDIR\\\"
 
      ")
-    set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+  set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
 
     \\\${DisableX64FSRedirection}
 
@@ -196,3 +202,4 @@ elseif(UNIX)
 endif(WIN32)
 
 include(CPack)
+

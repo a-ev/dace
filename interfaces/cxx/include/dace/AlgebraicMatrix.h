@@ -145,6 +145,19 @@ public:
     std::pair<AlgebraicVector<T>, AlgebraicMatrix<T>> eigh() const; //!< Eigenvalue decomposition for Hermitian matrices
 #endif /* WITH_EIGEN */
 
+#ifdef WITH_JULIA
+    // why do we need these???
+    friend inline bool DACE_API operator<(const AlgebraicMatrix<T> &mat, const DA &da) {
+        throw std::runtime_error("Comparison between DA and AlgebraicMatrix not implemented");
+    };
+    friend inline bool DACE_API operator<(const DA &da, const AlgebraicMatrix<T> &mat) {
+        throw std::runtime_error("Comparison between DA and AlgebraicMatrix not implemented");
+    };
+    friend inline bool DACE_API operator<(const AlgebraicMatrix<T> &mt1, const AlgebraicMatrix<T> &mt2) {
+        throw std::runtime_error("Comparison between two AlgebraicMatrix not implemented");
+    };
+#endif /* WITH_JULIA */
+
     /***********************************************************************************
     *     Input/Output routines
     ************************************************************************************/

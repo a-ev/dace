@@ -36,7 +36,9 @@ void exit(int code) {
 JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     using namespace DACE;
 
-    // add DA static methods separately
+    /***********************************************************************************
+    *   Static methods
+    ************************************************************************************/
     mod.method("init", [](const unsigned int ord, const unsigned int nvar) {
             DA::init(ord, nvar);
         }, "Initialize the DACE control arrays and set the maximum order, `arg1`, and the maximum number of variables, `arg2`.\n\n"
@@ -66,23 +68,36 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
             "Restore the previous truncation order from the truncation order stack.\n\n"
             "All terms larger than the truncation order are discarded in subsequent operations.");
 
-    // add the Monomial object
+
+    /***********************************************************************************
+    *   Monomial object
+    ************************************************************************************/
     mod.add_type<Monomial>("Monomial")
         .method("order", &Monomial::order)
         .method("toString", &Monomial::toString);
 
+    // override methods in Base
     mod.set_override_module(jl_base_module);
     mod.method("print", [](const Monomial& m) { std::cout << m.toString(); });
     mod.method("println", [](const Monomial& m) { std::cout << m.toString(); });
     mod.unset_override_module();
 
+    // treat Monomial as an element of STL containers
     jlcxx::stl::apply_stl<Monomial>(mod);
 
-    // map the Interval object to a predefined Julia structure
+
+    /***********************************************************************************
+    *   Interval object
+    ************************************************************************************/
     mod.map_type<Interval>("Interval");
+
+    // treat Interval as an element of STL containers
     jlcxx::stl::apply_stl<Interval>(mod);
 
-    // add the DA object
+
+    /***********************************************************************************
+    *   DA object
+    ************************************************************************************/
     mod.add_type<DA>("DA", jlcxx::julia_type("Real", "Base"))
         .constructor<>()
         .constructor<const double>()
@@ -97,10 +112,10 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
         .method("cons", &DA::cons)
         .method("toString", &DA::toString);
 
-    // TODO: add finalizer(s)??? is it necessary?
-
+    // treat DA as an element of STL containers
     jlcxx::stl::apply_stl<DA>(mod);
 
+    // DA specific methods
     mod.method("getMonomials", [](const DA& da)->std::vector<Monomial> { return da.getMonomials(); },
         "Get vector of all non-zero Monomials for DA `arg1`");
     mod.method("deriv", [](const DA& da, const unsigned int i) { return da.deriv(i); },
@@ -127,8 +142,6 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     mod.method("loggamma", [](const DA& da) { return da.LogGammaFunction(); });
     mod.method("powi", [](const DA& da, const int p) { return da.pow(p); });
     mod.method("powd", [](const DA& da, const double p) { return da.pow(p); });
-
-    // norm and estimation routines
     // mod.method("abs", [](const DA& da) { return da.abs(); });
     mod.method("norm", [](const DA& da, const unsigned int p) { return da.norm(p); });
     mod.method("orderNorm", [](const DA& da, const unsigned int v, const unsigned int p) { return da.orderNorm(v, p); });
@@ -142,7 +155,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     EVAL_SCALAR(DA, double);
     EVAL_SCALAR(DA, DA);
 
-    // adding DA methods to Base
+    // override methods in Base
     mod.set_override_module(jl_base_module);
     // operators
     mod.method("+", [](const DA& da1, const DA& da2) { return da1 + da2; });
@@ -158,7 +171,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     mod.method("/", [](const DA& da, const double c) { return da / c; });
     mod.method("/", [](const double c, const DA& da) { return c / da; });
     mod.method("-", [](const DA& da) { return -da; });
-    // maths functions
+    // math functions
     mod.method("sin", [](const DA& da) { return da.sin(); });
     mod.method("cos", [](const DA& da) { return da.cos(); });
     mod.method("tan", [](const DA& da) { return da.tan(); });
@@ -183,14 +196,16 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     mod.method("inv", [](const DA& da) { return da.minv(); });
     mod.method("round", [](const DA& da) { return da.round(); });
     mod.method("trunc", [](const DA& da) { return da.trunc(); });
-    // end adding methods to base
     mod.unset_override_module();
 
-    // add static factory routines
+    // static factory routines
     mod.method("random", [](const double cm) { return DA::random(cm); });
+    mod.method("identity", [](const unsigned int var) { return DA::identity(var); });
 
 
-    // adding AlgebraicVector
+    /***********************************************************************************
+    *   AlgebraicVector object
+    ************************************************************************************/
     mod.add_type<jlcxx::Parametric<jlcxx::TypeVar<1>>>("AlgebraicVector", jlcxx::julia_type("AbstractVector", "Base"))
             .apply<AlgebraicVector<DA>, AlgebraicVector<double>>([](auto wrapped) {
         typedef typename decltype(wrapped)::type WrappedT;
@@ -202,7 +217,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
         wrapped.method("toString", [](const WrappedT& avec) { return avec.toString(); });
         wrapped.method("sqr", [](const WrappedT& avec) { return avec.sqr(); });
 
-        // add methods to Base
+        // override methods in Base
         wrapped.module().set_override_module(jl_base_module);
         // implementing the AbstractArray interface
         wrapped.module().method("size", [](const WrappedT& avec)->std::tuple<int64_t> { return std::make_tuple(avec.size()); });
@@ -217,12 +232,15 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
         wrapped.module().method("tan", [](const WrappedT& avec) { return tan(avec); });
         // operators
         // TODO: ...
-        // stop adding methods to base
         wrapped.module().unset_override_module();
     });
 
-    mod.method("trim", [](const AlgebraicVector<DA>& da, const unsigned int min, const unsigned int max) { return da.trim(min, max); });
+    // treat AlgebraicVector as an element of STL containers
+    jlcxx::stl::apply_stl<AlgebraicVector<DA>>(mod);
+    jlcxx::stl::apply_stl<AlgebraicVector<double>>(mod);
 
+    // AlgebraicVector specific methods
+    mod.method("trim", [](const AlgebraicVector<DA>& da, const unsigned int min, const unsigned int max) { return da.trim(min, max); });
     mod.method("gradient", [](const DA& da)->AlgebraicVector<DA> { return da.gradient(); });
     mod.method("deriv", [](const AlgebraicVector<DA>& vec, const unsigned int p)->AlgebraicVector<DA> { return vec.deriv(p); });
     mod.method("integ", [](const AlgebraicVector<DA>& obj, const unsigned int p) { return obj.integ(p); });
@@ -231,6 +249,8 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     mod.method("cons", [](const AlgebraicVector<DA>& vec)->AlgebraicVector<double> { return vec.cons(); });
 
     // polynomial evaluation routines
+    EVAL(DA, AlgebraicVector<DA>);
+    EVAL(DA, AlgebraicVector<double>);
     EVAL(AlgebraicVector<DA>, AlgebraicVector<DA>);
     EVAL(AlgebraicVector<DA>, AlgebraicVector<double>);
     EVAL(AlgebraicVector<DA>, std::vector<DA>);
@@ -239,11 +259,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     EVAL_SCALAR(AlgebraicVector<DA>, double);
     EVAL_SCALAR(AlgebraicVector<DA>, DA);
 
-    // we need to define AlgebraicVector first before we can compile these
-    EVAL(DA, AlgebraicVector<DA>);
-    EVAL(DA, AlgebraicVector<double>);
-
-    // add AlgebraicVector methods to Base
+    // override methods in Base
     mod.set_override_module(jl_base_module);
     mod.method("+", [](const AlgebraicVector<DA>& vec1, const AlgebraicVector<DA>& vec2) { return vec1 + vec2; });
     mod.method("+", [](const AlgebraicVector<DA>& vec, const double scalar) { return vec + scalar; });
@@ -265,11 +281,12 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     mod.method("/", [](const double scalar, const AlgebraicVector<DA>& vec) { return scalar / vec; });
     mod.method("/", [](const AlgebraicVector<DA>& vec, const DA& scalar) { return vec / scalar; });
     mod.method("/", [](const DA& scalar, const AlgebraicVector<DA>& vec) { return scalar / vec; });
-    // end adding methods to base
     mod.unset_override_module();
 
 
-    // adding compiledDA
+    /***********************************************************************************
+    *   compiledDA object
+    ************************************************************************************/
     mod.add_type<compiledDA>("compiledDA")
         .constructor<const DA&>()
         .constructor<std::vector<DA>&>()
@@ -298,7 +315,9 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     EVAL_SCALAR(compiledDA, DA);
 
 
-    // adding AlgebraicMatrix
+    /***********************************************************************************
+    *   AlgebraicMatrix object
+    ************************************************************************************/
     mod.add_type<jlcxx::Parametric<jlcxx::TypeVar<1>>>("AlgebraicMatrix", jlcxx::julia_type("AbstractMatrix", "Base"))
             .apply<AlgebraicMatrix<DA>, AlgebraicMatrix<double>>([](auto wrapped) {
         typedef typename decltype(wrapped)::type WrappedT;
@@ -311,7 +330,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
         // pretty print
         wrapped.method("toString", [](const WrappedT& amat) { return amat.toString(); });
 
-        // add methods to base
+        // override methods in Base
         wrapped.module().set_override_module(jl_base_module);
         // implementing the abstract array interface
         // TODO check why the matrix bounds check is not working
@@ -321,10 +340,12 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
         wrapped.module().method("setindex!", [](WrappedT& amat, const ScalarT& val, const int irow, const int icol) { amat.at(irow-1, icol-1) = val; });
         wrapped.module().method("firstindex", [](const WrappedT& amat)->int64_t { return 1; });
         wrapped.module().method("lastindex", [](const WrappedT& amat)->int64_t { return amat.size(); });
-
-        // stop adding methods to base
         wrapped.module().unset_override_module();
     });
+
+    // treat AlgebraicVector as an element of STL containers
+    jlcxx::stl::apply_stl<AlgebraicMatrix<DA>>(mod);
+    jlcxx::stl::apply_stl<AlgebraicMatrix<double>>(mod);
 
     // Jacobian of a DA object (mimics the behavior of AlgebraicVecotr::jacobian() when called on a vector of size 1)
     mod.method("jacobian", [](const DA& da) { return da.jacobian(); });
@@ -332,11 +353,13 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     // Jacobian and linear part of an AlgebraicVector (requires definition of AlgebraicMatrix)
     mod.method("jacobian", [](const AlgebraicVector<DA>& vec) { return vec.jacobian(); });
     mod.method("linear", [](const AlgebraicVector<DA>& vec) { return vec.linear(); });
-
     mod.method("hessian", [](const DA& da) { return da.hessian(); });
     mod.method("hessian", [](const AlgebraicVector<DA>& vec) { return vec.hessian(); });
 
-    // statistics functions
+
+    /***********************************************************************************
+    *   Free functions
+    ************************************************************************************/
     mod.method("getMultiIndices", [](const unsigned int no, const unsigned int nv) { return getMultiIndices(no, nv); },
         "Get all multi-indices of order `arg1` in `arg2` variables.");
     mod.method("getRawMoments", [](const DA& mgf, const unsigned int no) {

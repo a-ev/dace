@@ -19,6 +19,7 @@ if(WITH_JULIA)
   add_library(dace SHARED $<TARGET_OBJECTS:c_core> $<TARGET_OBJECTS:c_core_contrib> $<TARGET_OBJECTS:dacecxx> $<TARGET_OBJECTS:dacejulia>)
   target_link_libraries(dace PUBLIC JlCxx::cxxwrap_julia)
   target_link_libraries(dace PUBLIC JlCxx::cxxwrap_julia_stl)
+  target_compile_definitions(dace PUBLIC WITH_JULIA)
 else()
   add_library(dace SHARED $<TARGET_OBJECTS:c_core> $<TARGET_OBJECTS:c_core_contrib> $<TARGET_OBJECTS:dacecxx>)
 endif()
@@ -85,3 +86,4 @@ configure_file("../../cmake/daceConfig.cmake"
 # install cmake package files
 install(EXPORT dace NAMESPACE dace:: DESTINATION lib/cmake/dace COMPONENT cmake)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/dace/daceConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/dace/daceConfigVersion.cmake" DESTINATION lib/cmake/dace COMPONENT cmake)
+
