@@ -819,7 +819,7 @@ void daceRoot(const DACEDA *ina, const int np, DACEDA *inc)
 
     if((iodd == 0) && (a0 <= 0.0))
     {
-        if (daceAbsoluteValue(ina) == 0.0)
+        if (daceMaxNorm(ina) == 0.0)
         {
             // ina is the constant zero
             daceCreateConstant(inc, 0.0);

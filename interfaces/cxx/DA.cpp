@@ -1584,6 +1584,18 @@ unsigned int DA::size() const{
     return res;
 }
 
+double DA::maxNorm() const{
+/*! Compute the max norm of a DA object.
+   \return A double corresponding to the result of the operation.
+   \throw DACE::DACEException
+ */
+    double c;
+    c=daceMaxNorm(m_index);
+    if(daceGetError()) DACEException();
+
+    return c;
+}
+
 double DA::norm(const unsigned int type) const{
 /*! Compute different types of norms for a DA object.
    \param[in] type type of norm to be computed. Possible norms are:\n
@@ -2637,14 +2649,14 @@ unsigned int size(const DA &da){
  */
     return da.size();}
 
-// double abs(const DA &da){
-// /*! Compute the max norm of a DA object.
-//    \param[in] da a given DA object.
-//    \return A double corresponding to the result of the operation.
-//    \throw DACE::DACEException
-//    \sa DA::abs
-//  */
-//     return da.abs();}
+double maxNorm(const DA &da){
+/*! Compute the max norm of a DA object.
+   \param[in] da a given DA object.
+   \return A double corresponding to the result of the operation.
+   \throw DACE::DACEException
+   \sa DA::maxNorm
+ */
+    return da.maxNorm();}
 
 double norm(const DA &da, unsigned int type){
 /*! Compute different types of norms for a DA object.
