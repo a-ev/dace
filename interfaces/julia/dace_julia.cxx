@@ -1,5 +1,3 @@
-#include "dace/AlgebraicVector.h"
-#include "dace/DA.h"
 #include <iostream>
 #include <stdexcept>
 #include <cstdlib>
@@ -7,6 +5,12 @@
 #include <jlcxx/stl.hpp>
 #include <jlcxx/tuple.hpp>
 #include <dace/dace.h>
+
+namespace DACE {
+    inline bool DACE_API operator<(const AlgebraicMatrix<DA> &mat, const DA &da) { throw std::runtime_error("Comparison between DA and AlgebraicMatrix not defined"); };
+    inline bool DACE_API operator<(const DA &da, const AlgebraicMatrix<DA> &mat) { throw std::runtime_error("Comparison between DA and AlgebraicMatrix not defined"); };
+    inline bool DACE_API operator<(const AlgebraicMatrix<DA> &mt1, const AlgebraicMatrix<DA> &mt2) { throw std::runtime_error("Comparison between two AlgebraicMatrix not defined"); };
+}
 
 // map trivial layouts directly, see "Breaking changes in v0.9" in CxxWrap README
 // template<> struct jlcxx::IsMirroredType<DACE::Interval> : std::false_type { };
@@ -254,10 +258,6 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
         wrapped.module().unset_override_module();
     });
 
-    // treat AlgebraicVector as an element of STL containers
-    jlcxx::stl::apply_stl<AlgebraicVector<DA>>(mod);
-    jlcxx::stl::apply_stl<AlgebraicVector<double>>(mod);
-
     // AlgebraicVector specific methods
     mod.method("trim", [](const AlgebraicVector<DA>& da, const unsigned int min, const unsigned int max) { return da.trim(min, max); });
     mod.method("gradient", [](const DA& da)->AlgebraicVector<DA> { return da.gradient(); });
@@ -373,10 +373,6 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
         });
 #endif
     });
-
-    // treat AlgebraicVector as an element of STL containers
-    jlcxx::stl::apply_stl<AlgebraicMatrix<DA>>(mod);
-    jlcxx::stl::apply_stl<AlgebraicMatrix<double>>(mod);
 
     mod.method("cons", [](const AlgebraicMatrix<DA>& mat)->AlgebraicMatrix<double> { return mat.cons(); });
 

@@ -78,7 +78,7 @@ if(WITH_EIGEN)
 endif()
 if(WITH_JULIA)
   find_package(JlCxx REQUIRED)
-  add_definitions(-DWITH_JULIA)
+  message(STATUS "Found JlCxx v${JlCxx_VERSION}: ${JlCxx_DIR}")
 endif()
 
 # Tri-state option for memory model and the associated choices
