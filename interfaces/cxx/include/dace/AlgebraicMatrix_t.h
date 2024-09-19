@@ -817,27 +817,69 @@ template<class T> AlgebraicMatrix<double> cons(const AlgebraicMatrix<T>& obj) {
 
 #ifdef WITH_EIGEN
 
-template<class T> std::pair<AlgebraicVector<T>, AlgebraicMatrix<T>> AlgebraicMatrix<T>::eigh() const{
+/***********************************************************************************
+*     Constructors & Destructors
+************************************************************************************/
 
-    const unsigned int nr = this->_nrows;
-    const unsigned int nc = this->_ncols;
-    if (nr!=nc)
-        throw std::runtime_error("DACE::AlgebraicMatrix<T>::eigh: Matrix must be square to compute the eigendecomposition.");
+template<typename T> AlgebraicMatrix<T>::AlgebraicMatrix(const Eigen::MatrixX<T>& data) : _nrows(data.rows()), _ncols(data.cols()) {
+/*! Constructor from Eigen::MatrixX.
+   \param[in] data Eigen::MatrixX to be converted into AlgebraicMatrix.
+ */
+    this->_data.resize(this->_nrows*this->_ncols);
+    for (unsigned int i=0; i<this->_nrows; i++)
+        for (unsigned int j=0; j<this->_ncols; j++)
+            this->_data[i*this->_ncols + j] = data(i,j);
+};
 
-    Eigen::MatrixX<T> temp = Eigen::MatrixX<T>(nr, nc);
-    for (unsigned int i=0; i<nr; i++)
-        for (unsigned int j=0; j<nc; j++)
+/***********************************************************************************
+*     Element access routines
+************************************************************************************/
+
+template<class T> Eigen::MatrixX<T> AlgebraicMatrix<T>::toEigen() const {
+/*! Convert the current AlgebraicMatrix<T> to Eigen::MatrixX.
+   \return An Eigen::MatrixX.
+ */
+    Eigen::MatrixX<T> temp(this->_nrows, this->_ncols);
+    for (unsigned int i=0; i<this->_nrows; i++)
+        for (unsigned int j=0; j<this->_ncols; j++)
             temp(i,j) = this->at(i,j);
+    return temp;
+}
 
-    Eigen::SelfAdjointEigenSolver<Eigen::MatrixX<T>> solver(temp);
+/***********************************************************************************
+*     Linear algebra routines backed by Eigen
+************************************************************************************/
 
-    AlgebraicVector<T> val = AlgebraicVector(solver.eigenvalues().data(), nr);
-    AlgebraicMatrix<T> vec = AlgebraicMatrix(solver.eigenvectors().transpose().data(), nr, nc);
+template<class T> std::pair<AlgebraicVector<T>, AlgebraicMatrix<T>> AlgebraicMatrix<T>::eigh() const{
+/*! Compute the eigenvalues and eigenvectors of a symmetric matrix.
+   \return A pair containing the eigenvalues and eigenvectors of the matrix.
+ */
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixX<T>> solver(this->toEigen());
+    AlgebraicVector<T> val = AlgebraicVector(solver.eigenvalues().data(), this->_nrows);
+    AlgebraicMatrix<T> vec = AlgebraicMatrix(solver.eigenvectors());
 
     return std::make_pair(val, vec);
 }
 
+/***********************************************************************************
+ *     Functional style wrappers
+ ************************************************************************************/
+
+template<class T> Eigen::MatrixX<T> toEigen(const AlgebraicMatrix<T> &obj){
+/*! Convert the current AlgebraicMatrix<T> to Eigen::MatrixX.
+   \param[in] obj An AlgebraicMatrix
+   \return An Eigen::MatrixX that is the equivalent of the original AlgebraicMatrix.
+   \sa AlgebraicMatrix<T>::toEigen
+ */
+    return obj.toEigen();
+}
+
 template<class T> std::pair<AlgebraicVector<T>, AlgebraicMatrix<T>> eigh(const AlgebraicMatrix<T> &obj){
+/*! Compute the eigenvalues and eigenvectors of a symmetric matrix.
+   \param[in] obj An AlgebraicMatrix
+   \return A pair containing the eigenvalues and eigenvectors of the matrix.
+   \sa AlgebraicMatrix<T>::eigh
+ */
     return obj.eigh();
 }
 
