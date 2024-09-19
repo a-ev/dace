@@ -427,6 +427,9 @@ public:
 
 #ifdef WITH_EIGEN
 
+/*! Add support for DACE::DA as custom scalar type in Eigen.
+ *  See https://eigen.tuxfamily.org/dox/TopicCustomizing_CustomScalar.html
+ */
 namespace Eigen {
 
 template<> struct NumTraits<DACE::DA> : NumTraits<double> {

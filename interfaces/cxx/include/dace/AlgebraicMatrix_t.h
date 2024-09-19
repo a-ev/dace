@@ -854,7 +854,7 @@ template<class T> std::pair<AlgebraicVector<T>, AlgebraicMatrix<T>> AlgebraicMat
    \return A pair containing the eigenvalues and eigenvectors of the matrix.
  */
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixX<T>> solver(this->toEigen());
-    AlgebraicVector<T> val = AlgebraicVector(solver.eigenvalues().data(), this->_nrows);
+    AlgebraicVector<T> val = AlgebraicVector(solver.eigenvalues());
     AlgebraicMatrix<T> vec = AlgebraicMatrix(solver.eigenvectors());
 
     return std::make_pair(val, vec);

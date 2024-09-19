@@ -100,6 +100,14 @@ template<typename T> AlgebraicVector<T>::AlgebraicVector(const T *arr, size_t si
  */
 }
 
+#ifdef WITH_EIGEN
+template<typename T> AlgebraicVector<T>::AlgebraicVector(const Eigen::VectorX<T> &data) : std::vector<T>(data.data(), data.data() + data.size()){
+/*! Constructor to create a vector from an Eigen vector.
+   \param[in] data Eigen vector to be copied into AlgebraicVector
+ */
+}
+#endif /* WITH_EIGEN */
+
 /***********************************************************************************
 *     Coefficient access routines
 ************************************************************************************/
