@@ -3,5 +3,6 @@
 .idea
 .vscode
 .zed
+*.log
 build/
 documentation/
