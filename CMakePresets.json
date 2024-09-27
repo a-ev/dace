@@ -43,6 +43,28 @@
         "WITH_JULIA": "ON",
         "CUSTOM_EXIT": "ON"
       }
+    },
+    {
+      "name": "julia-macos",
+      "hidden": false,
+      "displayName": "DACE Julia MacOS",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "installDir": "$env{HOME}/.julia/dev/DACE_jll/override",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "/usr/bin/gcc",
+        "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+        "CMAKE_CXX_STANDARD": "20",
+        "CMAKE_INSTALL_PREFIX": "$env{HOME}/.julia/dev/DACE_jll/override",
+        "CMAKE_PREFIX_PATH": "$env{HOME}/.julia/dev/libcxxwrap_julia_jll/override",
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "WITH_PTHREAD": "ON",
+        "WITH_ALGEBRAICMATRIX": "ON",
+        "WITH_EIGEN": "ON",
+        "WITH_JULIA": "ON",
+        "CUSTOM_EXIT": "ON"
+      }
     }
   ],
   "buildPresets": [
@@ -55,6 +77,11 @@
       "name": "julia",
       "displayName": "DACE Julia",
       "configurePreset": "julia"
+    },
+    {
+      "name": "julia-macos",
+      "displayName": "DACE Julia MacOS",
+      "configurePreset": "julia-macos"
     }
   ]
 }
