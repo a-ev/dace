@@ -6,12 +6,6 @@
 #include <jlcxx/tuple.hpp>
 #include <dace/dace.h>
 
-// namespace DACE {
-//     inline bool DACE_API operator<(const AlgebraicMatrix<DA> &mat, const DA &da) { throw std::runtime_error("Comparison between DA and AlgebraicMatrix not defined"); };
-//     inline bool DACE_API operator<(const DA &da, const AlgebraicMatrix<DA> &mat) { throw std::runtime_error("Comparison between DA and AlgebraicMatrix not defined"); };
-//     inline bool DACE_API operator<(const AlgebraicMatrix<DA> &mt1, const AlgebraicMatrix<DA> &mt2) { throw std::runtime_error("Comparison between two AlgebraicMatrix not defined"); };
-// }
-
 // map trivial layouts directly, see https://github.com/JuliaInterop/CxxWrap.jl?tab=readme-ov-file#breaking-changes-in-v09
 // template<> struct jlcxx::IsMirroredType<DACE::Interval> : std::false_type { };
 
