@@ -6,13 +6,13 @@
 #include <jlcxx/tuple.hpp>
 #include <dace/dace.h>
 
-namespace DACE {
-    inline bool DACE_API operator<(const AlgebraicMatrix<DA> &mat, const DA &da) { throw std::runtime_error("Comparison between DA and AlgebraicMatrix not defined"); };
-    inline bool DACE_API operator<(const DA &da, const AlgebraicMatrix<DA> &mat) { throw std::runtime_error("Comparison between DA and AlgebraicMatrix not defined"); };
-    inline bool DACE_API operator<(const AlgebraicMatrix<DA> &mt1, const AlgebraicMatrix<DA> &mt2) { throw std::runtime_error("Comparison between two AlgebraicMatrix not defined"); };
-}
+// namespace DACE {
+//     inline bool DACE_API operator<(const AlgebraicMatrix<DA> &mat, const DA &da) { throw std::runtime_error("Comparison between DA and AlgebraicMatrix not defined"); };
+//     inline bool DACE_API operator<(const DA &da, const AlgebraicMatrix<DA> &mat) { throw std::runtime_error("Comparison between DA and AlgebraicMatrix not defined"); };
+//     inline bool DACE_API operator<(const AlgebraicMatrix<DA> &mt1, const AlgebraicMatrix<DA> &mt2) { throw std::runtime_error("Comparison between two AlgebraicMatrix not defined"); };
+// }
 
-// map trivial layouts directly, see "Breaking changes in v0.9" in CxxWrap README
+// map trivial layouts directly, see https://github.com/JuliaInterop/CxxWrap.jl?tab=readme-ov-file#breaking-changes-in-v09
 // template<> struct jlcxx::IsMirroredType<DACE::Interval> : std::false_type { };
 
 // macros for evaluation routines
@@ -383,7 +383,14 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     mod.method("jacobian", [](const AlgebraicVector<DA>& vec) { return vec.jacobian(); });
     mod.method("linear", [](const AlgebraicVector<DA>& vec) { return vec.linear(); });
     mod.method("hessian", [](const DA& da) { return da.hessian(); });
-    mod.method("hessian", [](const AlgebraicVector<DA>& vec) { return vec.hessian(); });
+
+    // temporary workaround for https://github.com/JuliaInterop/libcxxwrap-julia/issues/173
+    mod.method("hess_vec", [](const AlgebraicVector<DA>& vec) {
+        std::vector<AlgebraicMatrix<DA>> hess = vec.hessian();
+        jlcxx::Array<AlgebraicMatrix<DA>> out{};
+        for (size_t i = 0; i < vec.size(); ++i) out.push_back(hess[i]);
+        return out;
+    }, "Returns an array of Hessians where the `i`th entry is the Hessian of the `i`th element of `arg1`.");
 
 
     /***********************************************************************************
