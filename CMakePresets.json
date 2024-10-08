@@ -34,7 +34,6 @@
         "CMAKE_CXX_STANDARD": "20",
         "CMAKE_INSTALL_PREFIX": "$env{JULIA_DEPOT_PATH}/dev/DACE_jll/override",
         "CMAKE_PREFIX_PATH": "$env{JULIA_DEPOT_PATH}/dev/libcxxwrap_julia_jll/override",
-        "CMAKE_INSTALL_RPATH": "$env{JULIA_DEPOT_PATH}/dev/libcxxwrap_julia_jll/override/lib:$env{JULIA_DEPOT_PATH}/juliaup/julia-1.10.5+0.x64.linux.gnu/lib",
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "WITH_PTHREAD": "ON",
