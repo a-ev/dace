@@ -2,7 +2,7 @@
   "version": 8,
   "configurePresets": [
     {
-      "name": "dace",
+      "name": "cpp-linux",
       "hidden": false,
       "displayName": "DACE C++",
       "generator": "Ninja",
@@ -22,7 +22,7 @@
       }
     },
     {
-      "name": "julia",
+      "name": "julia-linux",
       "hidden": false,
       "displayName": "DACE Julia",
       "generator": "Ninja",
@@ -68,18 +68,18 @@
   ],
   "buildPresets": [
     {
-      "name": "dace",
+      "name": "cpp-linux",
       "displayName": "DACE C++",
-      "configurePreset": "dace"
+      "configurePreset": "cpp-linux"
     },
     {
-      "name": "julia",
+      "name": "julia-linux",
       "displayName": "DACE Julia",
-      "configurePreset": "julia"
+      "configurePreset": "julia-linux"
     },
     {
       "name": "julia-macos",
-      "displayName": "DACE Julia MacOS",
+      "displayName": "DACE Julia",
       "configurePreset": "julia-macos"
     }
   ]

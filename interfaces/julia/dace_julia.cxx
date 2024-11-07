@@ -60,7 +60,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
             "Return the truncation order currently set for computations, or zero if undefined.\n\n"
             "All terms larger than the truncation order are discarded in subsequent operations.");
     mod.method("pushTO", [](const unsigned int ot) { DA::pushTO(ot); },
-            "Set a new trunction order (`arg1`), saving the previous one on the truncation order stack.\n\n"
+            "Set a new truncation order (`arg1`), saving the previous one on the truncation order stack.\n\n"
             "All terms larger than the truncation order are discarded in subsequent operations.");
     mod.method("popTO", []() { DA::popTO(); },
             "Restore the previous truncation order from the truncation order stack.\n\n"
@@ -81,7 +81,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     mod.unset_override_module();
 
     // treat Monomial as an element of STL containers
-    jlcxx::stl::apply_stl<Monomial>(mod);
+    // jlcxx::stl::apply_stl<Monomial>(mod);
 
 
     /***********************************************************************************
@@ -90,7 +90,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     mod.map_type<Interval>("Interval");
 
     // treat Interval as an element of STL containers
-    jlcxx::stl::apply_stl<Interval>(mod);
+    // jlcxx::stl::apply_stl<Interval>(mod);
 
 
     /***********************************************************************************
@@ -111,7 +111,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
         .method("toString", &DA::toString);
 
     // treat DA as an element of STL containers
-    jlcxx::stl::apply_stl<DA>(mod);
+    // jlcxx::stl::apply_stl<DA>(mod);
 
     // DA specific methods
     mod.method("getMonomials", [](const DA& da)->std::vector<Monomial> { return da.getMonomials(); },
@@ -376,16 +376,21 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod) {
     // Jacobian and linear part of an AlgebraicVector (requires definition of AlgebraicMatrix)
     mod.method("jacobian", [](const AlgebraicVector<DA>& vec) { return vec.jacobian(); });
     mod.method("linear", [](const AlgebraicVector<DA>& vec) { return vec.linear(); });
+
+    // Hessian matrix of a DA object and of the elements of an AlgebraicVector
     mod.method("hessian", [](const DA& da) { return da.hessian(); });
+    mod.method("hessian", [](const AlgebraicVector<DA>& vec) { return vec.hessian(); },
+        "Returns a vector of Hessians where the `i`th entry is the Hessian of the `i`th element of `arg1`.");
 
     // temporary workaround for https://github.com/JuliaInterop/libcxxwrap-julia/issues/173
+    /*
     mod.method("hess_vec", [](const AlgebraicVector<DA>& vec) {
         std::vector<AlgebraicMatrix<DA>> hess = vec.hessian();
         jlcxx::Array<AlgebraicMatrix<DA>> out{};
         for (size_t i = 0; i < vec.size(); ++i) out.push_back(hess[i]);
         return out;
     }, "Returns an array of Hessians where the `i`th entry is the Hessian of the `i`th element of `arg1`.");
-
+    */
 
     /***********************************************************************************
     *   Free functions
